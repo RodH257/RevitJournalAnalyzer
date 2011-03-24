@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace JournalAnalyzer
 {
+    /// <summary>
+    /// Author: Rod Howarth http://www.rodhowarth.com 
+    /// </summary>
     public partial class AnalysisForm : Form
     {
         public AnalysisForm()
@@ -21,7 +24,7 @@ namespace JournalAnalyzer
             KeyboardShortcutAnalyzer analyzer = new KeyboardShortcutAnalyzer(this.txtJournalFile.Text, this.txtShortcutsFile.Text);
 
             IEnumerable<string> topShortcuts = analyzer.GetTopShortcutsUsed();
-            IEnumerable<string> topCommands = analyzer.GetTopRibbonCommandsUsed();
+            IEnumerable<string> topCommands = analyzer.GetTopRibbonCommandsUsed(this.chkbIncludeContext.Checked);
 
             string outputMessage = "";
             foreach (string shortcut in topShortcuts)

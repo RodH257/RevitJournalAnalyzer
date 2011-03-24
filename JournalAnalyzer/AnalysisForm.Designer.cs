@@ -41,6 +41,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtShortcutsFile = new System.Windows.Forms.TextBox();
+            this.chkbIncludeContext = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +56,7 @@
             // 
             // btnStartAnalysis
             // 
-            this.btnStartAnalysis.Location = new System.Drawing.Point(624, 182);
+            this.btnStartAnalysis.Location = new System.Drawing.Point(624, 251);
             this.btnStartAnalysis.Margin = new System.Windows.Forms.Padding(4);
             this.btnStartAnalysis.Name = "btnStartAnalysis";
             this.btnStartAnalysis.Size = new System.Drawing.Size(107, 26);
@@ -89,9 +90,9 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtTopCommands);
             this.groupBox1.Controls.Add(this.txtTopShortcuts);
-            this.groupBox1.Location = new System.Drawing.Point(12, 207);
+            this.groupBox1.Location = new System.Drawing.Point(12, 301);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1445, 533);
+            this.groupBox1.Size = new System.Drawing.Size(1445, 447);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Command Analysis";
@@ -121,7 +122,7 @@
             this.txtTopCommands.Multiline = true;
             this.txtTopCommands.Name = "txtTopCommands";
             this.txtTopCommands.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtTopCommands.Size = new System.Drawing.Size(693, 437);
+            this.txtTopCommands.Size = new System.Drawing.Size(693, 376);
             this.txtTopCommands.TabIndex = 1;
             this.txtTopCommands.WordWrap = false;
             // 
@@ -132,7 +133,7 @@
             this.txtTopShortcuts.Multiline = true;
             this.txtTopShortcuts.Name = "txtTopShortcuts";
             this.txtTopShortcuts.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtTopShortcuts.Size = new System.Drawing.Size(723, 437);
+            this.txtTopShortcuts.Size = new System.Drawing.Size(723, 376);
             this.txtTopShortcuts.TabIndex = 0;
             this.txtTopShortcuts.WordWrap = false;
             // 
@@ -163,11 +164,22 @@
             this.txtShortcutsFile.TabIndex = 6;
             this.txtShortcutsFile.Text = "C:\\Program Files\\Autodesk\\Revit Structure 2011\\Journals\\";
             // 
+            // chkbIncludeContext
+            // 
+            this.chkbIncludeContext.AutoSize = true;
+            this.chkbIncludeContext.Location = new System.Drawing.Point(449, 197);
+            this.chkbIncludeContext.Name = "chkbIncludeContext";
+            this.chkbIncludeContext.Size = new System.Drawing.Size(227, 22);
+            this.chkbIncludeContext.TabIndex = 9;
+            this.chkbIncludeContext.Text = "Include Context Menu Entries";
+            this.chkbIncludeContext.UseVisualStyleBackColor = true;
+            // 
             // AnalysisForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1486, 799);
+            this.ClientSize = new System.Drawing.Size(1486, 845);
+            this.Controls.Add(this.chkbIncludeContext);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtShortcutsFile);
             this.Controls.Add(this.label5);
@@ -203,6 +215,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtShortcutsFile;
+        private System.Windows.Forms.CheckBox chkbIncludeContext;
     }
 }
 

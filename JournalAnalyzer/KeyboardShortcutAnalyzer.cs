@@ -7,11 +7,15 @@ using System.Threading;
 
 namespace JournalAnalyzer
 {
+    /// <summary>
+    /// Analyzes a journal fine to get the most popular keyboard shortcuts and commands 
+    /// Author: Rod Howarth http://www.rodhowarth.com 
+    /// </summary>
     class KeyboardShortcutAnalyzer
     {
         private string _shortcutDir;
         private string _keyboardShortcutsFile;
-        private const int TOP_LIMIT = 10;
+        private const int TOP_LIMIT = 20;
 
         public KeyboardShortcutAnalyzer(string shortcutDir, string keyboardShortcutsFile)
         {
@@ -24,7 +28,7 @@ namespace JournalAnalyzer
 
         public IEnumerable<string> GetTopShortcutsUsed()
         {
-            IEnumerable<string> topShortcuts = GetTopEntries(TOP_LIMIT, "KeyboardShortcut");
+            IEnumerable<string> topShortcuts = GetTopEntries(TOP_LIMIT, new List<string>{"KeyboardShortcut"});
 
             if (!File.Exists(_keyboardShortcutsFile))
                 return topShortcuts;
@@ -52,28 +56,33 @@ namespace JournalAnalyzer
                 string line = reader.ReadLine();
                 if (!line.Contains(id))
                     continue;
-                
+
                 //its got the ID, extract the Shortcuts
                 string shortCutsText = "\" Shortcuts=";
                 int indexOfShortcuts = line.IndexOf(shortCutsText);
                 int indexOfPaths = line.IndexOf("Paths=\"");
                 string shortcuts = line.Substring(indexOfShortcuts + shortCutsText.Length, indexOfPaths - (indexOfShortcuts + shortCutsText.Length));
                 shortcuts = shortcuts.Replace("\"", "");
-               lineToModify = lineToModify.Replace(id, shortcuts).Replace("\"", "");
+                lineToModify = lineToModify.Replace(id, shortcuts).Replace("\"", "");
             }
             return lineToModify;
         }
 
-        public IEnumerable<string> GetTopRibbonCommandsUsed()
+        public IEnumerable<string> GetTopRibbonCommandsUsed(bool includeContextMenu)
         {
-            return GetTopEntries(TOP_LIMIT, "Internal");
+            List<string> searchCommands = new List<string> {"Internal"};
+
+            if (includeContextMenu)
+                searchCommands.Add("ContextMenu");
+
+            return GetTopEntries(TOP_LIMIT, searchCommands);
         }
 
 
         /// <summary>
         /// Parses the documents and looks for the top entryLimit amount of lines with Jrn.Command "commandName"
         /// </summary>
-        public IEnumerable<string> GetTopEntries(int entryLimit, string commandName)
+        public IEnumerable<string> GetTopEntries(int entryLimit, IEnumerable<string > commandNameSearches)
         {
             //dictionary to hold counts of entries
             IDictionary<string, int> entries = new Dictionary<string, int>();
@@ -83,18 +92,21 @@ namespace JournalAnalyzer
             {
                 FileStream file = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 StreamReader reader = new StreamReader(file);
-
-                while (!reader.EndOfStream)
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    string line = reader.ReadLine();
-                    string linePrefix = "Jrn.Command \"" + commandName + "\" ,";
-                    if (line.Contains(linePrefix))
+                    //search through each command name ption
+                    foreach (string commandName in commandNameSearches)
                     {
-                        string entry = line.Replace(linePrefix, "");
-                        if (entries.ContainsKey(entry))
-                            entries[entry]++;
-                        else
-                            entries.Add(entry, 1);
+                        string linePrefix = "Jrn.Command \"" + commandName + "\" ,";
+                        if (line.Contains(linePrefix))
+                        {
+                            string entry = line.Replace(linePrefix, "");
+                            if (entries.ContainsKey(entry))
+                                entries[entry]++;
+                            else
+                                entries.Add(entry, 1);
+                        }
                     }
                 }
             }
@@ -104,7 +116,7 @@ namespace JournalAnalyzer
                               orderby entry.Value descending
                               select entry).ToList();
 
-            for (int i = 0; i < 10 && i < sortedDict.Count; i++)
+            for (int i = 0; i < entryLimit && i < sortedDict.Count; i++)
             {
                 yield return sortedDict[i].Key + " - " + sortedDict[i].Value + " times";
             }
